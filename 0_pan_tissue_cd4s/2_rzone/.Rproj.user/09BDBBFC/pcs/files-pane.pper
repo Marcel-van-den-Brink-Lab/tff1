@@ -1,0 +1,13 @@
+{
+    "sortOrder": [
+        {
+            "columnIndex": 4,
+            "ascending": false
+        },
+        {
+            "columnIndex": 2,
+            "ascending": true
+        }
+    ],
+    "path": "~/github/2_tff1/1_pyzone/1_outputs/1_degs"
+}

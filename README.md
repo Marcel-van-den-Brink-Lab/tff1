@@ -1,7 +1,6 @@
 # Treg-Derived Tff1 Promotes Thymic Epithelial Cell Regeneration
 
-This repository contains analysis code and datasets associated with the project  
-**“Treg-Derived Tff1 Promotes Thymic Epithelial Cell Regeneration.”**
+This repository contains analysis code and datasets associated with this project. 
 
 The goal of this project is to understand how Treg-derived **Tff1** influences
 thymic epithelial cell (TEC) regeneration and thymic function within

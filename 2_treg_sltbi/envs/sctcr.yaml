@@ -194,4 +194,3 @@ dependencies:
       - websocket-client==1.9.0
       - yamlordereddictloader==0.4.2
       - zipp==3.23.0
-prefix: /coh_labs/mvandenbrink/users/pkaur/miniconda3/envs/sctcr

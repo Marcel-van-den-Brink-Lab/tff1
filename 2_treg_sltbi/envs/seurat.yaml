@@ -475,4 +475,3 @@ dependencies:
   - zeromq=4.3.5=h387f397_9
   - zipp=3.23.0=pyhcf101f3_1
   - zstd=1.5.7=hb78ec9c_6
-prefix: /coh_labs/mvandenbrink/users/pkaur/miniconda3/envs/seurat

@@ -1,6 +1,4 @@
-# TFF1 — Single-Cell Analysis Repository
-
-**van den Brink Lab**
+# TFF1
 
 This repository contains three independent single-cell RNA-seq (scRNA-seq) analysis projects focused on regulatory T cells (Tregs) and thymic epithelial cells (TECs) in mouse models. Each project is self-contained with its own notebooks, analysis steps, and conda environments.
 

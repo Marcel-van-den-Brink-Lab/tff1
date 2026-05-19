@@ -1,0 +1,115 @@
+# =============================================================================
+# params.yml — Pipeline parameters for nf-core/atacseq v2.1.2
+# Project: atacseq_pipeline | https://nf-co.re/atacseq/2.1.2/
+#
+# Edit the values in this file before submitting your run.
+# Full parameter reference: https://nf-co.re/atacseq/2.1.2/parameters
+# Annotated guide: docs/parameter_reference.md
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Input / Output
+# -----------------------------------------------------------------------------
+
+# Path to the completed samplesheet CSV.
+input: 'samplesheet.csv'
+
+# Directory where all results will be written.
+# Use an absolute path on a project or scratch filesystem for large outputs.
+outdir: 'results'
+
+# Email address for pipeline completion/error notification.
+# Leave as placeholder or set to empty string "" to disable.
+# Requires a mail server configured on the cluster.
+email: 'mkaur@coh.org'
+
+# -----------------------------------------------------------------------------
+# Reference Genome
+# -----------------------------------------------------------------------------
+fasta: '/coh_labs/mvandenbrink/users/pkaur/6_tff1/2_bulk_atac/atacseq_pipeline/reference/mm10.fa'
+
+gtf: '/coh_labs/mvandenbrink/users/pkaur/6_tff1/2_bulk_atac/atacseq_pipeline/reference/mm10.refGene.gtf'
+
+blacklist: '/coh_labs/mvandenbrink/users/pkaur/6_tff1/2_bulk_atac/atacseq_pipeline/reference/mm10-blacklist.v2.bed'
+
+mito_name: 'chrM'
+
+# -----------------------------------------------------------------------------
+# Read Trimming
+# -----------------------------------------------------------------------------
+
+# Skip adapter trimming entirely (not recommended — trim adapters for ATAC-seq).
+# Nextera adapters used in ATAC-seq are auto-detected by Trim Galore.
+skip_trimming: false
+
+save_trimmed: true
+
+# -----------------------------------------------------------------------------
+# Alignment
+# -----------------------------------------------------------------------------
+
+# Aligner to use for mapping reads to the genome.
+# Options: bwa, bowtie2, chromap, star
+# bwa is the standard choice for ATAC-seq.
+aligner: 'bwa'
+
+# Read length of your sequencing data.
+# MUST be one of: 50, 75, 100, 150, 200
+# Used to select the correct mismatch parameters and TSS enrichment reference.
+read_length: 150
+
+# Keep PCR/optical duplicates (default: remove with Picard MarkDuplicates).
+# Set true only if library complexity is extremely low.
+keep_dups: false
+
+# Keep multi-mapping reads (MAPQ = 0). Not recommended for ATAC-seq.
+keep_multi_map: false
+
+# Fragment size for extending single-end reads to estimate fragment length (bp).
+# Only used for single-end data; ignored for paired-end.
+fragment_size: 200
+
+# -----------------------------------------------------------------------------
+# Peak Calling (MACS2)
+# -----------------------------------------------------------------------------
+
+# Call narrow peaks (false) or broad peaks (true).
+# For ATAC-seq, narrow peaks (default false here) are standard practice.
+# Broad peaks may be appropriate for some histone marks but not typical ATAC-seq.
+narrow_peak: false
+
+macs_fdr: 0.05
+
+save_macs_pileup: true
+
+# Effective genome size for MACS2. Auto-calculated from read_length when using
+# a supported iGenomes genome. Uncomment and set manually for custom genomes.
+# Common values: hs (human ~2.7e9), mm (mouse ~1.87e9), dm (fly), ce (worm)
+# macs_gsize: 'hs'
+
+# Minimum number of replicates a peak must appear in to be included in the
+# consensus peak set. Set to 1 to include all peaks (even singletons).
+min_reps_consensus: 2
+
+# -----------------------------------------------------------------------------
+# QC Steps
+# -----------------------------------------------------------------------------
+
+# Skip Picard CollectMultipleMetrics (insert size, alignment summary, etc.)
+skip_picard_metrics: false
+
+# Skip Preseq library complexity estimation.
+# Default in nf-core/atacseq v2.1.2 is true — enable for library complexity plots.
+skip_preseq: true
+
+# Skip DESeq2-based QC (sample-level clustering, PCA on consensus peaks).
+# Requires >= 2 conditions/groups with replicates to run meaningfully.
+skip_deseq2_qc: false
+
+# -----------------------------------------------------------------------------
+# Reference Index Caching
+# -----------------------------------------------------------------------------
+
+# Save the generated genome index (BWA/bowtie2) to the output directory.
+# Set true to reuse the index on future runs — avoids rebuilding (~30 min).
+save_reference: true

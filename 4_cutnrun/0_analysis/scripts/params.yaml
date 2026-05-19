@@ -1,0 +1,16 @@
+input: "0_samplesheets/samplesheet.csv"
+igenomes_base: "igenomes"
+blacklist: "references/blacklist/mm10-blacklist.v2.bed.gz"
+outdir: "1_nf_output"
+genome: mm10
+peakcaller: seacr
+remove_mitochondrial_reads: true
+normalisation_mode: CPM
+seacr_stringent: relaxed
+seacr_norm: non
+use_control: true
+skip_igv: true
+skip_dt_qc: true
+skip_heatmaps: true
+replicate_threshold: 2
+

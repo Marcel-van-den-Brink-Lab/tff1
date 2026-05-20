@@ -220,6 +220,6 @@ conda activate cutnrun
 
 2. Create and activate the appropriate environment for the project you want to run (see environment instructions under each project above).
 
-3. Launch Jupyter and open the notebooks in the order listed for each project. 
+3. Launch Jupyter and open the notebooks in the order listed for each dataset. 
 
 > Data files are not included in this repository. Please check GEO for input data.

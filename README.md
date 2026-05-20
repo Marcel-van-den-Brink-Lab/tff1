@@ -1,6 +1,6 @@
 # TFF1
 
-This repository contains three independent single-cell RNA-seq (scRNA-seq) analysis projects focused on regulatory T cells (Tregs) and thymic epithelial cells (TECs) in mouse models. Each project is self-contained with its own notebooks, analysis steps, and conda environments.
+This repository contains five independent analysis projects focused on regulatory T cells (Tregs) and thymic epithelial cells (TECs) in mouse models. Projects span single-cell RNA-seq (scRNA-seq), single-cell TCR-seq (scTCR-seq), bulk ATAC-seq, and CUT&RUN data. Each project is self-contained with its own notebooks, analysis steps, and conda environments.
 
 ---
 
@@ -11,6 +11,8 @@ This repository contains three independent single-cell RNA-seq (scRNA-seq) analy
 | [`0_pan_tissue_cd4s/`](0_pan_tissue_cd4s/) | Pan-tissue CD4 T cell analysis, focused on Tregs |
 | [`1_wt_ko_tecs/`](1_wt_ko_tecs/) | WT vs TFF1 knockout thymic epithelial cell (TEC) analysis |
 | [`2_treg_sltbi/`](2_treg_sltbi/) | Treg analysis following sublethal total body irradiation (SLTBI) |
+| [`3_bulk_atacseq/`](3_bulk_atacseq/) | Bulk ATAC-seq differential accessibility and motif enrichment (TEC organoids: Tff1 OE vs GFP EV) |
+| [`4_cutnrun/`](4_cutnrun/) | CUT&RUN differential binding, motif analysis, and visualization (TEC organoids: Tff1 OE vs GFP EV) |
 
 ---
 
@@ -127,6 +129,80 @@ conda activate sctcr
 
 ---
 
+### 4. Bulk ATAC-seq Differential Accessibility Analysis
+
+**Dataset:** Bulk ATAC-seq from mouse thymic epithelial cell (TEC) organoids comparing Tff1 overexpression (OE) to GFP empty vector (EV) control. Raw reads are processed with the nf-core/atacseq v2.1.2 Nextflow pipeline, followed by differential accessibility analysis, heatmap visualization, and transcription factor motif enrichment.
+
+#### Pipeline Scripts (`0_analysis/nextflow_scripts/`)
+
+| File | Description |
+|------|-------------|
+| [`run_atacseq.sh`](3_bulk_atacseq/0_analysis/nextflow_scripts/run_atacseq.sh) | SLURM submission script for nf-core/atacseq v2.1.2 |
+| [`params.yml`](3_bulk_atacseq/0_analysis/nextflow_scripts/params.yml) | Pipeline parameters |
+| [`nextflow.config`](3_bulk_atacseq/0_analysis/nextflow_scripts/nextflow.config) | Nextflow configuration |
+| [`samplesheet.csv`](3_bulk_atacseq/0_analysis/nextflow_scripts/samplesheet.csv) | Input sample sheet |
+| [`run_global_heatmap.sh`](3_bulk_atacseq/0_analysis/nextflow_scripts/run_global_heatmap.sh) | Global signal heatmap generation |
+| [`run_global_heatmap_per_replicate.sh`](3_bulk_atacseq/0_analysis/nextflow_scripts/run_global_heatmap_per_replicate.sh) | Per-replicate heatmap generation |
+
+#### Analysis Notebooks (`0_analysis/`)
+
+| Step | Notebook | Language | Description |
+|------|----------|----------|-------------|
+| DiffBind | [`0_diffbind/diffbind_atac.ipynb`](3_bulk_atacseq/0_analysis/0_diffbind/diffbind_atac.ipynb) | R | Differential accessibility analysis using DiffBind |
+| Heatmaps | [`1_stacked_heatmaps/stacked_heatmap.ipynb`](3_bulk_atacseq/0_analysis/1_stacked_heatmaps/stacked_heatmap.ipynb) | Python | Stacked ATAC-seq signal heatmaps |
+| Heatmaps | [`1_stacked_heatmaps/replicate_heatmaps.ipynb`](3_bulk_atacseq/0_analysis/1_stacked_heatmaps/replicate_heatmaps.ipynb) | Python | Per-replicate ATAC-seq heatmaps |
+| chromVAR | [`2_chromvar/chromvar_motif_enrichment.ipynb`](3_bulk_atacseq/0_analysis/2_chromvar/chromvar_motif_enrichment.ipynb) | R | Transcription factor motif enrichment using chromVAR |
+
+#### Reference
+
+- [`reference/mm10-blacklist.v2.bed`](3_bulk_atacseq/reference/mm10-blacklist.v2.bed) — ENCODE mm10 blacklist regions
+
+#### Environment
+```bash
+conda env create -f 3_bulk_atacseq/envs/bulkatac.yaml
+conda activate bulkatac
+```
+
+---
+
+### 5. CUT&RUN Differential Binding Analysis
+
+**Dataset:** CUT&RUN profiling of transcription factors (FosB, JunB) and histone mark H3K4me3 in mouse thymic epithelial cell (TEC) organoids comparing Tff1 overexpression (OE) to GFP empty vector (EV) control. Raw reads are processed with the nf-core/cutandrun Nextflow pipeline with SEACR peak calling, followed by DiffBind differential binding analysis, HOMER motif enrichment, deepTools heatmaps, and track-level visualization.
+
+#### Pipeline Scripts (`0_analysis/scripts/`)
+
+| File | Description |
+|------|-------------|
+| [`01_setup.sh`](4_cutnrun/0_analysis/scripts/01_setup.sh) | Environment and directory setup |
+| [`02_run_pipeline.sh`](4_cutnrun/0_analysis/scripts/02_run_pipeline.sh) | SLURM submission script for nf-core/cutandrun |
+| [`04_run_homer.sh`](4_cutnrun/0_analysis/scripts/04_run_homer.sh) | HOMER known motif analysis |
+| [`05_deeptools_heatmaps.sh`](4_cutnrun/0_analysis/scripts/05_deeptools_heatmaps.sh) | deepTools signal heatmap generation |
+| [`06_avg_bigwigs.sh`](4_cutnrun/0_analysis/scripts/06_avg_bigwigs.sh) | Average bigWig track generation across replicates |
+| [`params.yaml`](4_cutnrun/0_analysis/scripts/params.yaml) | Pipeline parameters |
+
+#### Analysis Notebooks (`0_analysis/`)
+
+| Step | Notebook | Language | Description |
+|------|----------|----------|-------------|
+| DiffBind | [`0_diffbind/fosb_diffbind_seacr.ipynb`](4_cutnrun/0_analysis/0_diffbind/fosb_diffbind_seacr.ipynb) | R | Differential binding analysis — FosB |
+| DiffBind | [`0_diffbind/junb_diffbind_seacr.ipynb`](4_cutnrun/0_analysis/0_diffbind/junb_diffbind_seacr.ipynb) | R | Differential binding analysis — JunB |
+| DiffBind | [`0_diffbind/h3k4me3_diffbind_seacr.ipynb`](4_cutnrun/0_analysis/0_diffbind/h3k4me3_diffbind_seacr.ipynb) | R | Differential binding analysis — H3K4me3 |
+| HOMER | [`1_homer/known_motif_analysis.ipynb`](4_cutnrun/0_analysis/1_homer/known_motif_analysis.ipynb) | Python | Known transcription factor motif enrichment in H3K4me3 peaks |
+| Heatmaps | [`2_heatmaps/stacked_heatmap.ipynb`](4_cutnrun/0_analysis/2_heatmaps/stacked_heatmap.ipynb) | Python | Stacked CUT&RUN signal heatmaps |
+| Trackplots | [`3_trackplots/trackplots.ipynb`](4_cutnrun/0_analysis/3_trackplots/trackplots.ipynb) | Python | Genome browser-style track visualization |
+
+#### Reference
+
+- [`references/blacklist/mm10-blacklist.v2.bed.gz`](4_cutnrun/0_analysis/references/blacklist/mm10-blacklist.v2.bed.gz) — ENCODE mm10 blacklist regions (gzipped)
+
+#### Environment
+```bash
+conda env create -f 4_cutnrun/envs/cutnrun.yaml
+conda activate cutnrun
+```
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -144,11 +220,6 @@ conda activate sctcr
 
 2. Create and activate the appropriate environment for the project you want to run (see environment instructions under each project above).
 
-3. Launch Jupyter and open the notebooks in the order listed for each project:
-   ```bash
-   jupyter notebook
-   ```
+3. Launch Jupyter and open the notebooks in the order listed for each project. 
 
 > Data files are not included in this repository. Please check GEO for input data.
-
----

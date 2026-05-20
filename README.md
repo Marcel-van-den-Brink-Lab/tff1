@@ -16,7 +16,7 @@ This repository contains five independent analysis projects focused on regulator
 
 ---
 
-## Projects
+## Datasets
 
 ### 1. Pan-Tissue CD4 T Cell Analysis
 
